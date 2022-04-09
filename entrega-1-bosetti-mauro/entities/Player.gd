@@ -2,7 +2,6 @@ extends Sprite
 
 export (float) var speed:float = 75
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 
 	var movement_right = int(Input.is_action_pressed("move_right"))
