@@ -14,8 +14,10 @@ var velocity : Vector2 = Vector2.ZERO
 # parent que necesitamos que tenga el projectile. Esto es recomendable unicamente
 # cuando queremos que el projectile o lo que sea tenga una matriz de transformacion
 # distinta a los elementos que tiene alrededor
-func set_projectile_container(container:Node):
+func set_values(container:Node, x_limit : int, y_limit : int):
 	cannon.projectile_container = container
+	cannon.x_limit = x_limit
+	cannon.y_limit = y_limit
 	projectile_container = container
 
 func _physics_process(delta):
