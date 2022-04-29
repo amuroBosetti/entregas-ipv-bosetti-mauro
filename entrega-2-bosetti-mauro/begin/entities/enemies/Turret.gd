@@ -7,9 +7,11 @@ onready var fire_position : Position2D = $FirePosition
 var projectile_container : Node
 var player
 
-func set_values(player, projectile_container):
+func spawn(container, player, spawn_position):
 	self.player = player
-	self.projectile_container = projectile_container
+	self.projectile_container = container
+	container.add_child(self)
+	position = spawn_position
 	$Timer.start()
 
 func _on_Timer_timeout():
