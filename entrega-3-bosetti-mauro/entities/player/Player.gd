@@ -8,7 +8,8 @@ export (float) var ACCELERATION:float = 20.0
 export (float) var H_SPEED_LIMIT:float = 600.0
 export (float) var FRICTION_WEIGHT:float = 0.1
 export (float) var JUMP_SPEED:float = -500
-export (float) var GRAVITY:float = 10
+export (float) var GRAVITY:float = 20
+var SPAWN_POINT : Vector2 = Vector2(50,400)
 
 var velocity:Vector2 = Vector2.ZERO
 var projectile_container
@@ -40,9 +41,19 @@ func _get_input():
 	var h_movement_direction:int = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
 	
 	if h_movement_direction != 0:
-		velocity.x = clamp(velocity.x + (h_movement_direction * ACCELERATION), -H_SPEED_LIMIT, H_SPEED_LIMIT)
+		velocity.x = clamp(velocity.x + (h_movement_direction * acceleration()), -H_SPEED_LIMIT, H_SPEED_LIMIT)
 	else:
 		velocity.x = lerp(velocity.x, 0, FRICTION_WEIGHT) if abs(velocity.x) > 1 else 0
 		
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") && is_on_floor():
 		velocity.y = JUMP_SPEED
+
+func acceleration():
+	if is_on_floor():
+		return ACCELERATION
+	else:
+		return ACCELERATION - 10 
+
+func hit(projectile):
+	velocity = Vector2.ZERO
+	position = SPAWN_POINT

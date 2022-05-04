@@ -11,9 +11,12 @@ var target : Node2D
 func _ready():
 	fire_timer.connect("timeout", self, "fire_at_player")
 
-func initialize(container, turret_pos, projectile_container):
+func initialize_on_position(container, turret_pos, projectile_container):
 	container.add_child(self)
 	global_position = turret_pos
+	self.projectile_container = projectile_container
+	
+func initialize(projectile_container):
 	self.projectile_container = projectile_container
 
 func fire_at_player():
