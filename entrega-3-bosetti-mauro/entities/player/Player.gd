@@ -23,7 +23,7 @@ func _physics_process(_delta):
 	
 	#Por dentro usa el delta, ya no tenemos que hacerlo a mano
 	velocity.y += GRAVITY
-	move_and_slide(velocity, Vector2.UP)
+	velocity = move_and_slide(velocity, Vector2.UP)
 	
 func _get_input():
 	# Cannon rotation
