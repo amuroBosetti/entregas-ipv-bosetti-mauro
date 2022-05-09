@@ -17,6 +17,7 @@ export (int) var max_health = 20
 export (float) var ACCELERATION:float = 30.0
 export (float) var H_SPEED_LIMIT:float = 400.0
 export (int) var jump_speed = 1000
+export (int) var dash_speed = 200
 export (float) var FRICTION_WEIGHT:float = 0.1
 export (int) var gravity = 30
 
@@ -26,6 +27,7 @@ var velocity:Vector2 = Vector2.ZERO
 var snap_vector:Vector2 = SNAP_DIRECTION * SNAP_LENGTH
 var move_direction:int = 0
 var stop_on_slope:bool = true
+var dash_direction : int = 1
 
 
 func _ready():
@@ -40,6 +42,7 @@ func initialize(projectile_container):
 
 func _handle_move_input():
 	move_direction = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
+	dash_direction = move_direction
 	if move_direction != 0:
 		velocity.x = clamp(velocity.x + (move_direction * ACCELERATION), -H_SPEED_LIMIT, H_SPEED_LIMIT)
 

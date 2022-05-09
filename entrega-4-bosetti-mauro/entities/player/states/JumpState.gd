@@ -4,6 +4,10 @@ func enter():
 	parent.velocity.y = -parent.jump_speed
 	parent.snap_vector = Vector2.ZERO
 
+func handle_input(event:InputEvent):
+	if event.is_action_pressed("dash"):
+		emit_signal("finished", "dash")
+
 func update(delta:float):
 	parent._handle_cannon_actions()
 	parent._handle_move_input()
