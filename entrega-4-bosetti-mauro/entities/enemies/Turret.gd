@@ -10,7 +10,7 @@ export (PackedScene) var projectile_scene
 
 export (Vector2) var wandering_range : Vector2
 export (float) var speed = 10
-export (float) var max_speed = 50
+export (float) var max_speed = 200
 
 var target
 var projectile_container
@@ -53,7 +53,7 @@ func _physics_process(delta):
 			next_point = path.front()
 		
 		if position.distance_to(next_point) > 2:
-			velocity.x += clamp(velocity.x + (next_point - position).normalized().x * speed, -max_speed, max_speed)
+			velocity.x = clamp(velocity.x + (next_point - position).normalized().x * speed, -max_speed, max_speed)
 			print(position)
 		else:
 			path.pop_front()
