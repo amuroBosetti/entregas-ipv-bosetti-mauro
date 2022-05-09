@@ -1,6 +1,6 @@
 extends Node
 
-onready var player = $Environment/Player
+onready var player = $Player
 
 func _ready():
 	randomize()

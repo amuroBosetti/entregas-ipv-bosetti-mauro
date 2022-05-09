@@ -5,6 +5,7 @@ onready var fire_timer = $FireTimer
 onready var raycast = $FirePosition/RayCast2D
 onready var idle_timer : Timer = $IdleTimer
 onready var detection_area:Area2D = $DetectionArea
+onready var state_machine = $StateMachine
 
 export (PackedScene) var projectile_scene
 
@@ -20,10 +21,11 @@ var path : Array = []
 
 var velocity : Vector2 = Vector2.ZERO
 
+
 func _ready():
 	fire_timer.connect("timeout", self, "fire")
-	set_physics_process(false)
 	idle_timer.start()
+	state_machine.set_parent(self)
 
 func initialize(container, turret_pos, projectile_container):
 	container.add_child(self)
@@ -38,14 +40,15 @@ func fire():
 		proj_instance.initialize(projectile_container, fire_position.global_position, fire_position.global_position.direction_to(target.global_position))
 		fire_timer.start()
 
-func _physics_process(delta):
+func _handle_shooting():
 	raycast.set_cast_to(to_local(target.global_position))
 	if raycast.is_colliding() && raycast.get_collider() == target:
 		if fire_timer.is_stopped():
 			fire_timer.start()
 	elif !fire_timer.is_stopped():
 		fire_timer.stop()
-		
+
+func _handle_walking():
 	if !path.empty():
 		var next_point : Vector2 = to_local(path.front())
 		while !path.empty() && position.distance_to(next_point) < 2:
@@ -54,7 +57,6 @@ func _physics_process(delta):
 		
 		if position.distance_to(next_point) > 2:
 			velocity.x = clamp(velocity.x + (next_point - position).normalized().x * speed, -max_speed, max_speed)
-			print(position)
 		else:
 			path.pop_front()
 
@@ -73,21 +75,6 @@ func _remove():
 	collision_mask = 0
 
 
-func _on_DetectionArea_body_entered(body):
-	if target == null:
-		target=body
-		set_physics_process(true)
-
-
-func _on_DetectionArea_body_exited(body):
-	if body == target:
-		target = null
-		set_physics_process(false)
-
-
-
 func _on_IdleTimer_timeout():
 	var point : Vector2 = Vector2(rand_range(-wandering_range.x, wandering_range.x), rand_range(-wandering_range.y, wandering_range.y))
-	print(global_position)
 	path = pathfinding.get_simple_path(global_position, global_position + point)
-	path
